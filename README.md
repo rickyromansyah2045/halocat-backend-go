@@ -1,6 +1,6 @@
 ## API Documentation
 
-You can find complete API documentation at the following link: https://documenter.getpostman.com/view/8546369/2s93JowkfT 
+You can find complete API documentation at the following link: 
 
 ## How To Run On Local Machine
 
