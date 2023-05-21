@@ -13,7 +13,7 @@ Requirements:
 If you really want to run it yourself on your local machine, you can follow these steps:
 
 1. ```git
-   git clone https://github.com/rickyromansyah2045/halocat-backend-go.git
+   git clone -b master https://github.com/rickyromansyah2045/halocat-backend-go.git
     ```
 2. ```
    cd halocat-backend-go
