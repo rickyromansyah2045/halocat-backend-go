@@ -31,8 +31,9 @@ func main() {
 	envLocation := projectRootPath + "/.env"
 
 	if *isProduction {
-		envLocation = "/home/presidentri2045/halocat-backend-go/.env"
-		// envLocation = "/www/wwwroot/golang/.env"
+		// envLocation = "/home/presidentri2045/halocat-backend-go/.env"
+		envLocation = "C:/Users/ricky/OneDrive/Dokumen/Halodoc Cat/halocat-backend-go/.env"
+
 	}
 
 	if err := godotenv.Load(envLocation); err != nil {
