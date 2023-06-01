@@ -16,6 +16,7 @@ import (
 	"github.com/rickyromansyah2045/halocat-backend-go/auth"
 	haloCatConfig "github.com/rickyromansyah2045/halocat-backend-go/config"
 	"github.com/rickyromansyah2045/halocat-backend-go/constant"
+	"github.com/rickyromansyah2045/halocat-backend-go/content"
 	"github.com/rickyromansyah2045/halocat-backend-go/handler"
 	"github.com/rickyromansyah2045/halocat-backend-go/helper"
 	"github.com/rickyromansyah2045/halocat-backend-go/middleware"
@@ -51,15 +52,16 @@ func main() {
 
 	// repositories
 	userRepository := user.NewRepository(db)
+	contentRepository := content.NewRepository(db)
 
 	// services
 	userSvc := user.NewService(userRepository)
 	authSvc := auth.NewService()
-	// companySvc := company.NewService(companyRepository)
-	// logsSvc := logs.NewService(logsRepository)
+	contentSvc := content.NewService(contentRepository, userRepository)
 
 	// handlers
 	userHandler := handler.NewUserHandler(userSvc, authSvc)
+	contentHandler := handler.NewContentHandler(contentSvc, userSvc)
 
 	// for activate release mode
 	if *isProduction {
@@ -100,6 +102,28 @@ func main() {
 		api.POST("/users", mAdminAuth, userHandler.CreateUser)
 		api.DELETE("/users/:id", mAdminAuth, userHandler.DeleteUser)
 
+		// contents
+		api.PUT("/contents/:id", mAuth, contentHandler.UpdateContent)
+		api.POST("/contents", mAuth, contentHandler.CreateContent)
+		api.DELETE("/contents/:id", mAuth, contentHandler.DeleteContent)
+
+		// contents -> images
+		api.POST("/contents/images", mAuth, contentHandler.UploadImage)
+		api.DELETE("/contents/images/:id", mAuth, contentHandler.DeleteContentImage)
+
+		// contents -> categories (for admin only)
+		api.PUT("/contents/categories/:id", mAdminAuth, contentHandler.UpdateContentCategory)
+		api.POST("/contents/categories", mAdminAuth, contentHandler.CreateContentCategory)
+		api.DELETE("/contents/categories/:id", mAdminAuth, contentHandler.DeleteContentCategory)
+
+		// admin datatables
+		api.GET("admin/datatables/users", mAdminAuth, userHandler.AdminDataTablesUsers)
+		api.GET("admin/datatables/categories", mAdminAuth, contentHandler.AdminDataTablesCategories)
+		api.GET("admin/datatables/contents", mAdminAuth, contentHandler.AdminDataTablesContents)
+
+		// datatables for user
+		api.GET("datatables/contents", mAuth, contentHandler.UserDataTablesContents)
+
 		// >>>>>>>>>>>>>>> end strict endpoint <<<<<<<<<<<<<<<
 
 		// >>>>>>>>>>>>>>> begin non-strict endpoint <<<<<<<<<<<<<<<
@@ -114,6 +138,18 @@ func main() {
 
 		// users
 		api.GET("/users/name/:id", userHandler.GetNameByID)
+
+		// contents
+		api.GET("/contents", contentHandler.GetAllContent)
+		api.GET("/contents/:id", contentHandler.GetContentByID)
+
+		// contents -> images
+		api.GET("/contents/images", contentHandler.GetAllContentImage)
+		api.GET("/contents/images/:id", contentHandler.GetContentImageByID)
+
+		// contents -> categories
+		api.GET("/contents/categories", contentHandler.GetAllContentCategory)
+		api.GET("/contents/categories/:id", contentHandler.GetContentCategoryByID)
 
 		// >>>>>>>>>>>>>>> end non-strict endpoint <<<<<<<<<<<<<<<
 	}
