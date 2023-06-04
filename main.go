@@ -1,21 +1,14 @@
 package main
 
 import (
-	"flag"
-	"log"
 	"net/http"
-	"os"
-	"path/filepath"
-	"runtime"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"github.com/rickyromansyah2045/halocat-backend-go/auth"
 	haloCatConfig "github.com/rickyromansyah2045/halocat-backend-go/config"
-	"github.com/rickyromansyah2045/halocat-backend-go/constant"
 	"github.com/rickyromansyah2045/halocat-backend-go/content"
 	"github.com/rickyromansyah2045/halocat-backend-go/handler"
 	"github.com/rickyromansyah2045/halocat-backend-go/helper"
@@ -24,30 +17,9 @@ import (
 )
 
 func main() {
-	isProduction := flag.Bool("production", true, "production mode?")
-	flag.Parse()
-
-	_, b, _, _ := runtime.Caller(0)
-	projectRootPath := filepath.Join(filepath.Dir(b), "")
-	envLocation := projectRootPath + "/.env"
-
-	if *isProduction {
-		envLocation = "C:/Users/ricky/OneDrive/Dokumen/Halodoc Cat/halocat-backend-go/.env"
-
-	}
-
-	if err := godotenv.Load(envLocation); err != nil {
-		log.Fatal("error while loading or open .env file, err: ", err.Error())
-	}
-
-	// initial constants
-	constant.InitGeneralConstant()
-	constant.InitDBConstant()
-	constant.InitAuthConstant()
-	constant.InitRedisConstant()
 
 	// initial database
-	db := haloCatConfig.InitDB(*isProduction)
+	db := haloCatConfig.InitDB()
 
 	// repositories
 	userRepository := user.NewRepository(db)
@@ -61,11 +33,6 @@ func main() {
 	// handlers
 	userHandler := handler.NewUserHandler(userSvc, authSvc)
 	contentHandler := handler.NewContentHandler(contentSvc, userSvc)
-
-	// for activate release mode
-	if *isProduction {
-		gin.SetMode(gin.ReleaseMode)
-	}
 
 	// gin app configuration
 	app := gin.Default()
@@ -164,5 +131,5 @@ func main() {
 	})
 
 	// run http server
-	app.Run(os.Getenv("APP_RUN_ON"))
+	app.Run("localhost:9000")
 }
