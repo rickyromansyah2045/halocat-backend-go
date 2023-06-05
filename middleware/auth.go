@@ -42,7 +42,7 @@ func Auth(authService auth.Service, userService user.Service) gin.HandlerFunc {
 			return
 		}
 
-		userID := int(claim["the_cloud_donation_user_id"].(float64))
+		userID := int(claim["halocat_user_id"].(float64))
 		user, err := userService.GetUserByID(userID)
 
 		if err != nil {
@@ -85,7 +85,7 @@ func AdminAuth(authService auth.Service, userService user.Service) gin.HandlerFu
 			return
 		}
 
-		userID := int(claim["the_cloud_donation_user_id"].(float64))
+		userID := int(claim["halocat_user_id"].(float64))
 		user, err := userService.GetUserByID(userID)
 
 		if err != nil {

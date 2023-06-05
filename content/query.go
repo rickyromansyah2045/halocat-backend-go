@@ -19,7 +19,7 @@ const (
 			deleted_at,
 			deleted_by
 		FROM
-			content
+			contents
 		WHERE
 			deleted_at IS NULL
 	`
@@ -42,7 +42,7 @@ const (
 			deleted_at,
 			deleted_by
 		FROM
-			content
+			contents
 		WHERE
 			deleted_at IS NULL
 		AND
@@ -168,7 +168,7 @@ const (
 			deleted_at,
 			deleted_by
 		FROM
-			content
+			contents
 		WHERE
 			deleted_at IS NULL
 	`
@@ -177,7 +177,7 @@ const (
 		SELECT
 			COUNT(id) AS count_id
 		FROM
-			content
+			contents
 		WHERE
 			deleted_at IS NULL
 	`
@@ -226,7 +226,7 @@ const (
 			deleted_at,
 			deleted_by
 		FROM
-			content
+			contents
 		WHERE
 			deleted_at IS NULL
 		AND
@@ -237,7 +237,7 @@ const (
 		SELECT
 			COUNT(id) AS count_id
 		FROM
-			content
+			contents
 		WHERE
 			deleted_at IS NULL
 		AND
