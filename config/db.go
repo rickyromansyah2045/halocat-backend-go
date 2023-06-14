@@ -12,7 +12,7 @@ import (
 
 func InitDB() *gorm.DB {
 	// Read and Write Connection
-	dsnRW := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", "root", "root123", "34.101.130.27", "3306", "halocat_db")
+	dsnRW := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", "user", "pass", "host", "3306", "database_name")
 	db, err := gorm.Open(mysql.Open(dsnRW), &gorm.Config{
 		PrepareStmt:            true,
 		SkipDefaultTransaction: true,
