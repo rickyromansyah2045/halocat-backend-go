@@ -10,24 +10,25 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/rickyromansyah2045/halocat-backend-go/content"
 	"github.com/rickyromansyah2045/halocat-backend-go/helper"
+	"github.com/rickyromansyah2045/halocat-backend-go/logs"
 	"github.com/rickyromansyah2045/halocat-backend-go/user"
 )
 
 type contentHandler struct {
 	contentSvc content.Service
 	userSvc    user.Service
-	// logsSvc    logs.Service
+	logsSvc    logs.Service
 }
 
 func NewContentHandler(
 	contentService content.Service,
 	userService user.Service,
-	// logsService logs.Service,
+	logsService logs.Service,
 ) *contentHandler {
 	return &contentHandler{
 		contentSvc: contentService,
 		userSvc:    userService,
-		// logsSvc:    logsService,
+		logsSvc:    logsService,
 	}
 }
 
@@ -127,7 +128,7 @@ func (handler *contentHandler) CreateContent(ctx *gin.Context) {
 	formatData := content.FormatContentData(newContentData)
 	response := helper.APIResponse(http.StatusCreated, "Create content successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v creating content id %v.", userData.Name, newContentData.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v creating content id %v.", userData.Name, newContentData.ID))
 
 	ctx.JSON(http.StatusCreated, response)
 }
@@ -207,7 +208,7 @@ func (handler *contentHandler) UpdateContent(ctx *gin.Context) {
 	formatData := content.FormatContentData(updatedContent)
 	response := helper.APIResponse(http.StatusOK, "Update content successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v updating content id %v.", reqUpdate.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v updating content id %v.", reqUpdate.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -251,7 +252,7 @@ func (handler *contentHandler) DeleteContent(ctx *gin.Context) {
 
 	response := helper.BasicAPIResponse(http.StatusOK, "Delete content successfully!")
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting content id %v.", reqDelete.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting content id %v.", reqDelete.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -344,7 +345,7 @@ func (handler *contentHandler) UploadImage(ctx *gin.Context) {
 	formatData := content.FormatContentImageData(uploadedContentImage)
 	response := helper.APIResponse(http.StatusOK, "Upload content image successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v uploading image id %v for content id %v.", req.User.Name, uploadedContentImage.ID, uploadedContentImage.ContentID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v uploading image id %v for content id %v.", req.User.Name, uploadedContentImage.ID, uploadedContentImage.ContentID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -388,7 +389,7 @@ func (handler *contentHandler) DeleteContentImage(ctx *gin.Context) {
 
 	response := helper.BasicAPIResponse(http.StatusOK, "Delete content image successfully!")
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting content image id %v.", reqDelete.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting content image id %v.", reqDelete.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -479,7 +480,7 @@ func (handler *contentHandler) DeleteContentCategory(ctx *gin.Context) {
 
 	response := helper.BasicAPIResponse(http.StatusOK, "Delete content category successfully!")
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting category id %v.", reqDelete.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting category id %v.", reqDelete.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -509,7 +510,7 @@ func (handler *contentHandler) CreateContentCategory(ctx *gin.Context) {
 	formatData := content.FormatContentCategoryData(newContentCategoryData)
 	response := helper.APIResponse(http.StatusCreated, "Create content category successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v creating category id %v.", req.User.Name, newContentCategoryData.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v creating category id %v.", req.User.Name, newContentCategoryData.ID))
 
 	ctx.JSON(http.StatusCreated, response)
 }
@@ -556,7 +557,7 @@ func (handler *contentHandler) UpdateContentCategory(ctx *gin.Context) {
 	formatData := content.FormatContentCategoryData(updatedContentCategory)
 	response := helper.APIResponse(http.StatusOK, "Update content category successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v updating category id %v.", reqUpdate.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v updating category id %v.", reqUpdate.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }

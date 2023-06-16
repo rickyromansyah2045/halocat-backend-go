@@ -8,27 +8,25 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rickyromansyah2045/halocat-backend-go/auth"
 	"github.com/rickyromansyah2045/halocat-backend-go/helper"
+	"github.com/rickyromansyah2045/halocat-backend-go/logs"
 	"github.com/rickyromansyah2045/halocat-backend-go/user"
 )
 
 type userHandler struct {
 	userSvc user.Service
 	authSvc auth.Service
-	// logsSvc    logs.Service
-	// companySvc company.Service
+	logsSvc logs.Service
 }
 
 func NewUserHandler(
 	userService user.Service,
 	authService auth.Service,
-	// logsService logs.Service,
-	// companyService company.Service,
+	logsService logs.Service,
 ) *userHandler {
 	return &userHandler{
 		userSvc: userService,
 		authSvc: authService,
-		// logsSvc:    logsService,
-		// companySvc: companyService,
+		logsSvc: logsService,
 	}
 }
 
@@ -84,7 +82,7 @@ func (handler *userHandler) Register(ctx *gin.Context) {
 	// 	go helper.SendMail(userData.Email, "Welcome to The Cloud Donation", templateData, "html/welcome.html")
 	// }
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%s registered to the system.", userData.Name))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%s registered to the system.", userData.Name))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -135,7 +133,7 @@ func (handler *userHandler) Login(ctx *gin.Context) {
 	formatData := user.FormatUserData(userData, token)
 	response := helper.APIResponse(http.StatusOK, "Login successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%s successfully login to the system.", userData.Name))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%s successfully login to the system.", userData.Name))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -226,7 +224,7 @@ func (handler *userHandler) CreateUser(ctx *gin.Context) {
 	formatData := user.FormatUserFullData(newUserData)
 	response := helper.APIResponse(http.StatusCreated, "Create user successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v creating user id %v.", req.User.Name, newUserData.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v creating user id %v.", req.User.Name, newUserData.ID))
 
 	ctx.JSON(http.StatusCreated, response)
 }
@@ -273,7 +271,7 @@ func (handler *userHandler) UpdateUser(ctx *gin.Context) {
 	formatData := user.FormatUserFullData(updatedUser)
 	response := helper.APIResponse(http.StatusOK, "Update user successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v updating user id %v.", reqUpdate.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v updating user id %v.", reqUpdate.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -317,7 +315,7 @@ func (handler *userHandler) DeleteUser(ctx *gin.Context) {
 
 	response := helper.BasicAPIResponse(http.StatusOK, "Delete user successfully!")
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting user id %v.", reqDelete.User.Name, reqID.ID))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v deleting user id %v.", reqDelete.User.Name, reqID.ID))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -373,7 +371,7 @@ func (handler *userHandler) ChangeUserData(ctx *gin.Context) {
 	formatData := user.FormatUserFullData(updatedUser)
 	response := helper.APIResponse(http.StatusOK, "Update self user data successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v self updating user data.", reqUpdate.User.Name))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v self updating user data.", reqUpdate.User.Name))
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -455,7 +453,7 @@ func (handler *userHandler) CreateForgotPasswordToken(ctx *gin.Context) {
 
 	response := helper.APIResponse(http.StatusCreated, "Request forgot password successfully, please check your email inbox or spam!", dataCreated)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v make a request token for forgot password.", req.User.Name))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v make a request token for forgot password.", req.User.Name))
 
 	ctx.JSON(http.StatusCreated, response)
 }
@@ -520,7 +518,7 @@ func (handler *userHandler) ProcessForgotPasswordToken(ctx *gin.Context) {
 	formatData := user.FormatUserData(userData, token)
 	response := helper.APIResponse(http.StatusOK, "Process request forgot password successfully!", formatData)
 
-	// handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v process request forgot password.", req.User.Name))
+	handler.logsSvc.CreateActivityLog(ctx, fmt.Sprintf("%v process request forgot password.", req.User.Name))
 
 	ctx.JSON(http.StatusOK, response)
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/rickyromansyah2045/halocat-backend-go/content"
 	"github.com/rickyromansyah2045/halocat-backend-go/handler"
 	"github.com/rickyromansyah2045/halocat-backend-go/helper"
+	"github.com/rickyromansyah2045/halocat-backend-go/logs"
 	"github.com/rickyromansyah2045/halocat-backend-go/middleware"
 	"github.com/rickyromansyah2045/halocat-backend-go/user"
 )
@@ -21,18 +22,23 @@ func main() {
 	// initial database
 	db := haloCatConfig.InitDB()
 
+	// initial scheduler
+	haloCatConfig.InitScheduler(db)
+
 	// repositories
 	userRepository := user.NewRepository(db)
 	contentRepository := content.NewRepository(db)
+	logsRepository := logs.NewRepository(db)
 
 	// services
 	userSvc := user.NewService(userRepository)
 	authSvc := auth.NewService()
 	contentSvc := content.NewService(contentRepository, userRepository)
+	logsSvc := logs.NewService(logsRepository)
 
 	// handlers
-	userHandler := handler.NewUserHandler(userSvc, authSvc)
-	contentHandler := handler.NewContentHandler(contentSvc, userSvc)
+	userHandler := handler.NewUserHandler(userSvc, authSvc, logsSvc)
+	contentHandler := handler.NewContentHandler(contentSvc, userSvc, logsSvc)
 
 	// gin app configuration
 	app := gin.Default()

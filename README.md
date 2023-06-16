@@ -1,3 +1,11 @@
+# Halocat - BE
+
+This github repository is the backend application for Halocat App.
+
+## About Halocat
+
+The "Hallocat" application is designed to facilitate cat lovers in consulting with veterinarians. With online consultation features, we aim to ensure that their cats' health is well-maintained and they have easy access to the necessary medical care."
+
 ## API Documentation
 
 You can find complete API documentation at the following link: https://documenter.getpostman.com/view/18409946/2s93m1bR3M
