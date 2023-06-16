@@ -39,6 +39,7 @@ func main() {
 	// handlers
 	userHandler := handler.NewUserHandler(userSvc, authSvc, logsSvc)
 	contentHandler := handler.NewContentHandler(contentSvc, userSvc, logsSvc)
+	logsHandler := handler.NewLogsHandler(logsSvc)
 
 	// gin app configuration
 	app := gin.Default()
@@ -92,6 +93,7 @@ func main() {
 		api.GET("admin/datatables/users", mAdminAuth, userHandler.AdminDataTablesUsers)
 		api.GET("admin/datatables/categories", mAdminAuth, contentHandler.AdminDataTablesCategories)
 		api.GET("admin/datatables/contents", mAdminAuth, contentHandler.AdminDataTablesContents)
+		api.GET("admin/datatables/logs/activity", mAdminAuth, logsHandler.AdminDataTablesActivityLogs)
 
 		// datatables for user
 		api.GET("datatables/contents", mAuth, contentHandler.UserDataTablesContents)
