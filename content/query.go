@@ -245,4 +245,15 @@ const (
 	`
 
 	QueryGetTotalContent = QueryCountAllAdminDataTablesContents
+
+	QueryGetContentCompleted = `
+		SELECT
+			COUNT(id) AS count_id
+		FROM
+			contents
+		WHERE
+			deleted_at IS NULL
+		AND
+			status = 'finished'
+	`
 )

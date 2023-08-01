@@ -30,6 +30,9 @@ type Repository interface {
 	AdminDataTablesCategories(ctx *gin.Context) (helper.DataTables, error)
 
 	UserDataTablesContents(*gin.Context, user.User) (helper.DataTables, error)
+
+	GetTotalContent() (int, error)
+	GetContentCompleted() (int, error)
 }
 
 type repository struct {

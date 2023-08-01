@@ -8,6 +8,7 @@ import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/rickyromansyah2045/halocat-backend-go/auth"
+	"github.com/rickyromansyah2045/halocat-backend-go/chart"
 	haloCatConfig "github.com/rickyromansyah2045/halocat-backend-go/config"
 	"github.com/rickyromansyah2045/halocat-backend-go/content"
 	"github.com/rickyromansyah2045/halocat-backend-go/handler"
@@ -27,19 +28,23 @@ func main() {
 
 	// repositories
 	userRepository := user.NewRepository(db)
+	chartRepository := chart.NewRepository(db)
 	contentRepository := content.NewRepository(db)
 	logsRepository := logs.NewRepository(db)
 
 	// services
 	userSvc := user.NewService(userRepository)
 	authSvc := auth.NewService()
+	chartSvc := chart.NewService(chartRepository)
 	contentSvc := content.NewService(contentRepository, userRepository)
 	logsSvc := logs.NewService(logsRepository)
 
 	// handlers
 	userHandler := handler.NewUserHandler(userSvc, authSvc, logsSvc)
+	chartHandler := handler.NewChartHandler(chartSvc)
 	contentHandler := handler.NewContentHandler(contentSvc, userSvc, logsSvc)
 	logsHandler := handler.NewLogsHandler(logsSvc)
+	webAndCMSHandler := handler.NewWebAndCMSHandler(contentSvc, userSvc, logsSvc)
 
 	// gin app configuration
 	app := gin.Default()
@@ -98,6 +103,15 @@ func main() {
 		// datatables for user
 		api.GET("datatables/contents", mAuth, contentHandler.UserDataTablesContents)
 
+		// logs
+		api.POST("logs/activity/auth", mAuth, logsHandler.AddLogsActivityAuth)
+
+		// dashboard statistics
+		api.GET("admin/dashboard/statistics", mAdminAuth, webAndCMSHandler.GetStatisticsForAdminDashboard)
+
+		// get chart
+		api.GET("admin/dashboard/chart", mAdminAuth, chartHandler.GetChart)
+
 		// >>>>>>>>>>>>>>> end strict endpoint <<<<<<<<<<<<<<<
 
 		// >>>>>>>>>>>>>>> begin non-strict endpoint <<<<<<<<<<<<<<<
@@ -124,6 +138,12 @@ func main() {
 		// contents -> categories
 		api.GET("/contents/categories", contentHandler.GetAllContentCategory)
 		api.GET("/contents/categories/:id", contentHandler.GetContentCategoryByID)
+
+		// logs
+		api.POST("logs/activity", logsHandler.AddLogsActivity)
+
+		// web
+		api.GET("web/home/statistics", webAndCMSHandler.GetStatisticsForHomePage)
 
 		// >>>>>>>>>>>>>>> end non-strict endpoint <<<<<<<<<<<<<<<
 	}

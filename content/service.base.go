@@ -28,6 +28,9 @@ type Service interface {
 	AdminDataTablesCategories(*gin.Context) (helper.DataTables, error)
 
 	UserDataTablesContents(*gin.Context, user.User) (helper.DataTables, error)
+
+	GetTotalContent() (int, error)
+	GetContentCompleted() (int, error)
 }
 
 type service struct {

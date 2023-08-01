@@ -743,3 +743,17 @@ func (repo *repository) UserDataTablesContents(ctx *gin.Context, user user.User)
 
 	return helper.BuildDatatTables(data, filtered, total), nil
 }
+
+func (repo *repository) GetTotalContent() (res int, err error) {
+	if err := repo.DB.Raw(helper.ConvertToInLineQuery(QueryGetTotalContent)).Scan(&res).Error; err != nil {
+		return res, err
+	}
+	return res, nil
+}
+
+func (repo *repository) GetContentCompleted() (res int, err error) {
+	if err := repo.DB.Raw(helper.ConvertToInLineQuery(QueryGetContentCompleted)).Scan(&res).Error; err != nil {
+		return res, err
+	}
+	return res, nil
+}

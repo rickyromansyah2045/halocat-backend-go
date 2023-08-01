@@ -337,3 +337,23 @@ func (svc *service) UserDataTablesContents(ctx *gin.Context, user user.User) (he
 
 	return dataTablesContents, nil
 }
+
+func (svc *service) GetTotalContent() (res int, err error) {
+	res, err = svc.repo.GetTotalContent()
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
+
+func (svc *service) GetContentCompleted() (res int, err error) {
+	res, err = svc.repo.GetContentCompleted()
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
